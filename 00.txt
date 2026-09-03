@@ -1,0 +1,224 @@
+Tengo dos vectores precargados con los datos: cod y hs
+Declarar variable para almacenar la sumatoria de hs
+Recorrer el vector hs y acumular hs dentro de la variable
+Declarar variable de "materia con menos cantidad de hs" para almacenar y reemplazar por el valor más bajo
+
+
+PROGRAMA horas_materia
+
+
+// vectores precargados
+// ambos vectores son paralelos, el indice coincide entre la materia y las hs de cada dia
+// cod contiene codigos del 1 al 6
+// hs contiene la cantidad de hs dedicadas a cada materia, de 6 materias
+
+// variables
+sum : Entero(2) // acumulador de hs
+min_hs : Entero(2) // cantidad de hs de la materia con menos hs
+min_cod : Entero (1) // cod de la materia con menos hs
+i : Entero(1) // variable para el iterador
+prom : Real(4,1)
+
+INICIO
+
+// inicializar variables
+sum := 0
+min_hs := hs(1)
+min_cod := cod(1)
+
+
+REPETIR PARA i := 1, 6, 1
+    sum := sum + hs(i)
+    SI (hs(i) < min_hs) ENTONCES
+        min_hs := hs(i)
+        min_cod := cod(i)
+    FIN SI
+FIN REPETIR PARA
+
+prom := sum / 7
+
+IMPRIMIR: "El promedio de hs de estudio en la semana es: ", prom
+IMPRIMIR: "La materia con menor cantidad de hs es: ", min_cod
+
+FIN_INICIO
+FIN_PROGRAMA
+
+
+
+
+
+-----
+
+EJERCICIO 2
+
+-----
+
+Contexto: Recolección de ítems en videojuegos.
+Enunciado:
+Se analiza la cantidad de ítems obtenidos al derrotar enemigos en 10 combates.
+Existen 4 tipos de ítems (1: Esferas, 2: Núcleos, 3: Baterías, 4: Armas).
+Se tiene una matriz pre-cargada llamada DROPS de 10x4. Las filas representan el número de combate 
+(del 1 al 10) y las columnas el tipo de ítem (del 1 al 4). El valor numérico en cada celda representa la cantidad de ítems obtenidos.
+
+Se solicita:
+
+Calcular e imprimir la cantidad total recolectada de cada tipo de ítem (es decir, calcular el total por columna).
+Indicar en qué combate (número de fila) se obtuvo la mayor cantidad total de ítems (sumando los 4 tipos de ítems de esa fila).
+
+Son 10 ciclos
+Tengo una matrix de 10x4 precargada. Fila: nro de combate (1 al 10), Columnas: tipo de item (1 al 4)
+Necesito una matriz para almacenar los datos (acumuladores) 10x 
+
+
+
+PROGRAMA contador_juego 
+
+// Obtengo la matriz cargada llamada mat1
+
+TIPOS ESTRUCTURADOS
+MAT = ARREGLO(10, 4) : Entero // Matriz precargada
+VEC1 = ARREGLO(4) : Entero
+
+VARIABLES
+mat1 : MAT
+acu2 : Entero (4) // acumulador provisorio total items por combate
+acu4 : Entero (2) // almacena el nro de combate donde hubo el max de items
+acu5 : Entero (5) // acumulador general total items por combate
+i : Entero(2)
+j : Entero(1)
+
+acu3 : VEC1 // del 1 al 4 tienen el mismo orden que la matriz
+
+INICIO
+// inicializar variables
+acu2 := 0
+acu4 := 0
+acu5 := 0
+i := 0
+j:= 0
+
+REPETIR PARA i := 1, 4, 1
+    acu3(i) := 0
+FIN_REPETIR_PARA
+
+REPETIR PARA i := 1, 10, 1
+    REPETIR PARA j := 1, 4, 1
+        acu3(j) := acu3(j) + mat1(i, j)
+        acu2 := acu2 + mat1(i, j)
+    FIN_REPETIR_PARA
+
+    SI (acu2 > acu5) ENTONCES
+        acu5 := acu2
+        acu4 := i
+    FIN_SI
+
+    acu2 := 0
+FIN_REPETIR_PARA
+
+
+REPETIR PARA i := 1, 4, 1
+    IMPRIMIR: "La cantidad de items tipo: ", i, " es de: ", acu3(i)
+FIN_REPETIR_PARA
+
+IMPRIMIR: "En el combate nro: ", acu4, " se ha recolectado el máximo de items: ", acu5
+
+FIN_INICIO
+FIN_PROGRAMA
+
+
+
+-----
+
+Ejercicio 3
+
+-----
+
+Contexto: Gestión de tareas de desarrollo.
+Enunciado:
+Un equipo de 5 desarrolladores tiene una carga de trabajo pre-asignada de 50 tareas.
+Se dispone de dos vectores paralelos pre-cargados de 50 posiciones: DESARROLLADOR (contiene el número de empleado del 1 al 5) y
+TIPO_TAREA (1: Frontend, 2: Backend, 3: Base de Datos).
+
+Durante la jornada, se evalúan las tareas una a una. Por cada tarea de la lista pre-cargada, el sistema debe preguntar 
+(mediante IMPRIMIR y LEER) si la tarea fue terminada (1: Sí, 2: No).
+
+Al finalizar de evaluar las 50 tareas, el programa debe reportar:
+El porcentaje de tareas terminadas sobre el total de 50.
+Cuántas tareas de Backend (tipo 2) quedaron sin terminar.
+El número del desarrollador que logró terminar la mayor cantidad de tareas.
+
+PROGRAMA gestion_desarrollo
+
+// TIPO ESTRUCTURADOS
+vec_tareas = ARREGLO(50) : Entero(1) // precargada (1: Frontend, 2: Backend, 3: Base de Datos)
+vec_desa = ARREGLO(50) : Entero(1) // precargada (contiene el número de empleado del 1 al 5)
+
+vec_terminado = ARREGLO(5) : Entero // contador terminado/ no-terminado (indice = numero de empleado)
+
+// VARIABLES
+pre_tareas : vec_tareas
+pre_desa : vec_desa
+
+v_term : vec_terminado
+acu_terminada : Entero(2) // acumulador de tareas terminadas
+acu_bd_sin_terminar : Entero(2) // acumulador de tareas tipo 2 no terminadas
+acu_dev_cant: Entero(2) // contador de mayor cantidad de tareas terminadas
+acu_dev_id: Entero(1) // número de empleado con mayor cantidad de tareas terminadas
+i: Entero(2)
+porc_tareas : Real (4,1)
+aux_booleano : Booleano
+
+INICIO
+
+// INICIALIZAR VARIABLES
+acu_terminada := 0
+acu_bd_sin_terminar := 0
+acu_dev_cant := 0
+acu_dev_id := 0
+aux_booleano := 0
+porc_tareas := 0
+
+REPETIR PARA i := 1, 5, 1
+    v_term(i) := 0
+FIN REPETIR PARA
+
+REPETIR PARA i := 1, 50, 1
+    IMPRIMIR: "La tarea nro: ", i, ", tipo: ", pre_tareas(i), " del empleado nro: ", pre_desa(i), " ha sido terminada (Si: 1, No: 0)?"
+    Leer: aux_booleano
+    
+    SI aux_booleano == 1 ENTONCES
+        acu_terminada := acu_terminada + 1
+        v_term(pre_desa(i)) := v_term(pre_desa(i)) + 1
+    SINO
+        SI pre_tareas(i) == 2 ENTONCES
+            acu_bd_sin_terminar := acu_bd_sin_terminar + 1
+        FIN_SI
+    FIN_SI
+FIN REPETIR PARA
+
+REPETIR PARA i := 1, 5, 1
+    SI v_term(i) > acu_dev_cant ENTONCES
+        acu_dev_cant := v_term(i)
+        acu_dev_id := i
+    FIN SI
+FIN_REPETIR_PARA
+
+porc_tareas := (acu_terminada / 50) * 100
+
+IMPRIMIR: "El porcentaje de tareas terminadas es del ", porc_tareas, "%"
+IMPRIMIR: "No han sido finalizadas ", acu_bd_sin_terminar, "tareas de Backend"
+IMPRIMIR: "El desarrollador de id: ", acu_dev_id, "ha finalizado la mayor cantidad de tareas: ", acu_dev_cant
+
+FIN INICIO
+
+FIN PROGRAMA
+
+
+
+
+
+
+
+
+
+
